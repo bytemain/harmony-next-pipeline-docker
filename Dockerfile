@@ -12,6 +12,7 @@ RUN apt-get update && \
         unzip \
         python3 \
         openjdk-17-jdk \
+        build-essential \
         git \
         && rm -rf /var/lib/apt/lists/*
 
