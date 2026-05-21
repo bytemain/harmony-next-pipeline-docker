@@ -14,7 +14,6 @@ RUN apt-get update && \
         openjdk-17-jdk \
         build-essential \
         git \
-        clang \
         && rm -rf /var/lib/apt/lists/*
 
 # 设置 JDK 17 环境变量
@@ -27,6 +26,7 @@ RUN mkdir -p /opt/harmonyos-tools && \
     echo "181d283be91392e0a5dc09caf5ebda34c778cccc9985d8a97a814808452e2471  /tmp/commandline-tools-linux.zip" | sha256sum -c - || { echo "ERROR: SHA256 checksum verification failed for HarmonyOS CLI tools"; exit 1; } && \
     unzip -q /tmp/commandline-tools-linux.zip -d /opt/harmonyos-tools/ && \
     chmod -R +x /opt/harmonyos-tools/command-line-tools/bin && \
+    chmod -R +x /opt/harmonyos-tools/command-line-tools/sdk/default/openharmony/native/llvm/bin && \
     rm /tmp/commandline-tools-linux.zip
 
 # 设置 HarmonyOS CLI 工具的环境变量
@@ -35,6 +35,8 @@ ENV PATH=$COMMANDLINE_TOOL_DIR/command-line-tools/bin:$PATH
 ENV HDC_HOME=$COMMANDLINE_TOOL_DIR/command-line-tools/sdk/default/openharmony/toolchains
 ENV PATH=$HDC_HOME:$PATH
 ENV OHOS_BASE_SDK_HOME=$COMMANDLINE_TOOL_DIR/command-line-tools/sdk/default/openharmony
+ENV OHOS_LLVM_HOME=$OHOS_BASE_SDK_HOME/native/llvm
+ENV PATH=$OHOS_LLVM_HOME/bin:$PATH
 
 # 设置工作目录
 WORKDIR /workspace
