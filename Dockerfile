@@ -8,7 +8,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y \
         wget \
+        zip \
         unzip \
+        python3 \
         openjdk-17-jdk \
         git \
         && rm -rf /var/lib/apt/lists/*
