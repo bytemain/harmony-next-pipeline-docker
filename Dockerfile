@@ -14,6 +14,7 @@ RUN apt-get update && \
         openjdk-17-jdk \
         build-essential \
         git \
+        clang \
         && rm -rf /var/lib/apt/lists/*
 
 # 设置 JDK 17 环境变量
