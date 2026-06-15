@@ -23,7 +23,7 @@ ENV PATH=$JAVA_HOME/bin:$PATH
 # 下载并安装 HarmonyOS CLI 工具
 RUN mkdir -p /opt/harmonyos-tools && \
     wget -q -O /tmp/commandline-tools-linux.zip https://image.cdn.dog/commandline-tools-linux-x64-6.1.1.280.zip && \
-    echo "829554008df4f0b48a080f920175d562a4ebc4823e914b92ef45387dc7e7d628  /tmp/commandline-tools-linux.zip" | sha256sum -c - || { echo "ERROR: SHA256 checksum verification failed for HarmonyOS CLI tools"; exit 1; } && \
+    echo "b9caf7b73c541b90e6c8f3c7c3de7f2bea9b35e41e80cd3525f2f759ebf16cf4  /tmp/commandline-tools-linux.zip" | sha256sum -c - || { echo "ERROR: SHA256 checksum verification failed for HarmonyOS CLI tools"; exit 1; } && \
     unzip -q /tmp/commandline-tools-linux.zip -d /opt/harmonyos-tools/ && \
     chmod -R +x /opt/harmonyos-tools/command-line-tools/bin && \
     chmod -R +x /opt/harmonyos-tools/command-line-tools/sdk/default/openharmony/native/llvm/bin && \
