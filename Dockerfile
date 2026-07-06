@@ -5,9 +5,14 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 安装必要的工具
+# curl: 部分构建脚本（如 prepare_ohos_sqlite_provider.sh 下载 SQLite amalgamation）依赖它，缺失会 exit 127。
+# zstd: GitHub Actions 的 actions/cache 条目指纹包含压缩工具；ubuntu runner 保存的是 zstd 压缩，
+#       容器里没有 zstd 时同 key 也会永远 miss（gzip-only 客户端），且不报错。
 RUN apt-get update && \
     apt-get install -y \
         wget \
+        curl \
+        zstd \
         zip \
         unzip \
         python3 \
