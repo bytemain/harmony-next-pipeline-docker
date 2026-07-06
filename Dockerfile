@@ -40,6 +40,10 @@ ENV PATH=$COMMANDLINE_TOOL_DIR/command-line-tools/bin:$PATH
 ENV HDC_HOME=$COMMANDLINE_TOOL_DIR/command-line-tools/sdk/default/openharmony/toolchains
 ENV PATH=$HDC_HOME:$PATH
 ENV OHOS_BASE_SDK_HOME=$COMMANDLINE_TOOL_DIR/command-line-tools/sdk/default/openharmony
+# The Kotlin/Native compiler locates the OpenHarmony sysroot via OHOS_SDK_HOME
+# (not OHOS_BASE_SDK_HOME); without it, building ohosArm64 fails with
+# "OHOS SDK is not found in '/usr/local/lib/DevEco-Studio/...'".
+ENV OHOS_SDK_HOME=$OHOS_BASE_SDK_HOME
 ENV OHOS_LLVM_HOME=$OHOS_BASE_SDK_HOME/native/llvm
 ENV PATH=$OHOS_LLVM_HOME/bin:$PATH
 
