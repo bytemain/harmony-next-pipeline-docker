@@ -47,6 +47,23 @@ ENV OHOS_SDK_HOME=$OHOS_BASE_SDK_HOME
 ENV OHOS_LLVM_HOME=$OHOS_BASE_SDK_HOME/native/llvm
 ENV PATH=$OHOS_LLVM_HOME/bin:$PATH
 
+# 预置 Android SDK：NetworkKMM / mobile 的 CI job 即使跑在本镜像里，每次仍要
+# curl commandline-tools + sdkmanager 装 platforms/build-tools（每 run 1-2 分钟）。
+# 烤进镜像后这些下载步骤可整段删除。版本对齐各 workflow 当前安装的组件：
+# platforms;android-36 + build-tools;36.0.0（另带 platform-tools）。
+# sha256 来自 Google 官方发布包（2026-07-09 下载实测校验一致）。
+ENV ANDROID_HOME=/opt/android-sdk
+ENV ANDROID_SDK_ROOT=$ANDROID_HOME
+RUN mkdir -p "$ANDROID_HOME/cmdline-tools" && \
+    wget -q -O /tmp/android-commandline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip && \
+    echo "2d2d50857e4eb553af5a6dc3ad507a17adf43d115264b1afc116f95c92e5e258  /tmp/android-commandline-tools.zip" | sha256sum -c - || { echo "ERROR: SHA256 checksum verification failed for Android commandline-tools"; exit 1; } && \
+    unzip -q /tmp/android-commandline-tools.zip -d "$ANDROID_HOME/cmdline-tools" && \
+    mv "$ANDROID_HOME/cmdline-tools/cmdline-tools" "$ANDROID_HOME/cmdline-tools/latest" && \
+    rm /tmp/android-commandline-tools.zip && \
+    (yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true) && \
+    "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0" "platform-tools" >/dev/null
+ENV PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
+
 # 设置工作目录
 WORKDIR /workspace
 
